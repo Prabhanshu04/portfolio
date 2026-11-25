@@ -148,6 +148,39 @@
   animation-delay: calc(var(--i) * 28ms);
 }
 
+/* ---------- Star cursor ---------- */
+html.star-cursor,
+html.star-cursor * {
+  cursor: none !important;
+}
+.star-cursor-el {
+  transition: opacity 150ms;
+  will-change: translate;
+}
+.star-cursor-svg {
+  display: block;
+  width: 26px;
+  height: 26px;
+  /* centre the star on the pointer */
+  translate: -50% -50%;
+  transition: scale 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.star-cursor-svg polygon {
+  transition: fill 150ms, stroke 150ms;
+}
+.star-cursor-el[data-active="true"] .star-cursor-svg {
+  scale: 1.45;
+  animation: star-spin 2.4s linear infinite;
+}
+.star-cursor-el[data-down="true"] .star-cursor-svg {
+  scale: 0.8;
+}
+@keyframes star-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
 @keyframes pulse-dot {
   0%,
   100% {

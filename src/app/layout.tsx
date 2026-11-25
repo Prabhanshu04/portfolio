@@ -7,6 +7,7 @@ import "@fontsource/space-mono/400.css";
 import "@fontsource/space-mono/700.css";
 import "./globals.css";
 import { site } from "@/content/site";
+import { StarCursor } from "@/components/star-cursor";
 
 export const metadata: Metadata = {
   title: { default: `${site.name} — The Living Index`, template: `%s — ${site.name}` },
@@ -19,6 +20,7 @@ export default function RootLayout({ children, modal }: { children: React.ReactN
       <body className="min-h-dvh">
         {children}
         {modal}
+        <StarCursor />
       </body>
     </html>
   );

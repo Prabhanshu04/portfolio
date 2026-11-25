@@ -1,16 +1,11 @@
 import { site } from "@/content/site";
+import { starPoints } from "./star";
 
 function Star({ className }: { className?: string }) {
   // Six-pointed outline star from the Figma "Stay curious" tile
-  const pts: string[] = [];
-  for (let i = 0; i < 12; i++) {
-    const a = (Math.PI / 6) * i - Math.PI / 2;
-    const r = i % 2 === 0 ? 30 : 14;
-    pts.push(`${(32 + r * Math.cos(a)).toFixed(2)},${(32 + r * Math.sin(a)).toFixed(2)}`);
-  }
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden>
-      <polygon points={pts.join(" ")} fill="none" stroke="var(--chart-2)" strokeWidth="3" strokeLinejoin="round" />
+      <polygon points={starPoints()} fill="none" stroke="var(--chart-2)" strokeWidth="3" strokeLinejoin="round" />
     </svg>
   );
 }
