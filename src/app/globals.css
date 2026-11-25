@@ -1,26 +1,169 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+/* Neobrutalism duotone palette: fuchsia (from neobrutalism.dev styling) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: hsl(49, 100%, 80%);
+  --secondary-background: oklch(100% 0 0);
+  --foreground: oklch(0% 0 0);
+  --main-foreground: oklch(0% 0 0);
+  --main: hsl(291, 100%, 71%);
+  --border: oklch(0% 0 0);
+  --ring: oklch(0% 0 0);
+  --overlay: oklch(0% 0 0 / 0.8);
+  --shadow: 4px 4px 0px 0px var(--border);
+  --chart-1: #e96bff;
+  --chart-2: #facc00;
+  --chart-3: #ff7a05;
+  --chart-4: #ff4d50;
+  --chart-5: #7a83ff;
+  --chart-active-dot: #000;
+
+  /* Grid line width for the Living Index */
+  --line: 1.5px;
+  /* Figma cell ratio: 142.4 wide × 164 tall */
+  --cell-ratio: 1.1517;
 }
 
 @theme inline {
+  --color-main: var(--main);
   --color-background: var(--background);
+  --color-secondary-background: var(--secondary-background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-main-foreground: var(--main-foreground);
+  --color-border: var(--border);
+  --color-overlay: var(--overlay);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --spacing-boxShadowX: 4px;
+  --spacing-boxShadowY: 4px;
+  --spacing-reverseBoxShadowX: -4px;
+  --spacing-reverseBoxShadowY: -4px;
+  --radius-base: 5px;
+  --shadow-shadow: var(--shadow);
+  --font-weight-base: 500;
+  --font-weight-heading: 800;
+
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply text-foreground font-base bg-background font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------- Living Index grid ---------- */
+
+/* The grid draws its lines with the gap: the container is black,
+   every cell paints its own colour on top. */
+.index-grid {
+  container-type: inline-size;
+  display: grid;
+  gap: var(--line);
+  background: var(--border);
+  border: var(--line) solid var(--border);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: calc((100cqw - 1 * var(--line)) / 2 * var(--cell-ratio));
+  grid-auto-flow: row dense;
+}
+
+.cell {
+  position: relative;
+  min-width: 0;
+  grid-column: span min(var(--w, 1), 2);
+  grid-row: span var(--h, 1);
+}
+
+/* Cells that exist only to complete the desktop composition */
+.cell-desktop-only {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .index-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: calc((100cqw - 3 * var(--line)) / 4 * var(--cell-ratio));
+  }
+  .cell {
+    grid-column: span min(var(--w, 1), 4);
+  }
+}
+
+@media (min-width: 1024px) {
+  .index-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-auto-rows: calc((100cqw - 7 * var(--line)) / 8 * var(--cell-ratio));
+    grid-auto-flow: row;
+  }
+  .cell {
+    grid-column: var(--c) / span var(--w, 1);
+    grid-row: var(--r) / span var(--h, 1);
+  }
+  .cell-desktop-only {
+    display: block;
+  }
+}
+
+/* A clickable tile covers the grid lines around its cell, so its own
+   border lines up exactly with the grid when it is pressed flat. */
+.press-tile {
+  position: absolute;
+  inset: calc(-1 * var(--line));
+  border: var(--line) solid var(--border);
+}
+
+/* Hover subdivision: small squares appear one after another */
+@keyframes sub-in {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.sub-square {
+  opacity: 0;
+}
+.group:hover .sub-square,
+.group:focus-visible .sub-square {
+  animation: sub-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: calc(var(--i) * 28ms);
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+    animation-delay: 0ms !important;
+  }
 }
