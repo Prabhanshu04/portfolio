@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { contactHref, site } from "@/content/site";
+import { StarLogo } from "./star";
 
 export function SiteHeader() {
   return (
     <header className="mx-auto flex w-full max-w-[1184px] flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 pt-6 sm:px-0 sm:pt-8">
-      <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name}, home`}>
-        <span className="grid size-9 place-items-center rounded-full bg-foreground font-heading text-sm text-white">
-          {site.initials}
-        </span>
+      <Link href="/" className="group flex items-center gap-2" aria-label={`${site.name}, home`}>
+        <StarLogo className="-my-2 size-[52px] shrink-0" />
         <span className="font-mono text-xs font-bold uppercase tracking-wide">{site.tagline}</span>
       </Link>
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-xs uppercase tracking-wide">
