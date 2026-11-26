@@ -13,7 +13,9 @@ export type PartnerId =
   | "ksia"
   | "toto"
   | "spa-vijayawada"
-  | "nasa-india";
+  | "nasa-india"
+  | "red-cross"
+  | "efteling";
 
 export type Partner = { id: PartnerId; name: string; short?: string; logo?: string };
 
@@ -22,6 +24,8 @@ export const partners: Partner[] = [
   { id: "aaif", name: "Amsterdam AI Factory", short: "AAiF" },
   { id: "toto", name: "TOTO" },
   { id: "ksia", name: "KSIA" },
+  { id: "red-cross", name: "Red Cross" },
+  { id: "efteling", name: "Efteling" },
   { id: "erasmus-mc", name: "Erasmus MC" },
   { id: "juvoly", name: "Juvoly" },
   { id: "spa-vijayawada", name: "SPA Vijayawada" },

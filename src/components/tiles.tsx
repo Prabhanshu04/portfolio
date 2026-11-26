@@ -144,6 +144,54 @@ export function ProjectTile({ project, w, h, dimmed }: { project: Project; w: nu
   );
 }
 
+/** "Explore more": a deck of cards in project-tile style. Click to deal the rest into the grid. */
+export function DeckTile({ count, first, last, open, onToggle }: { count: number; first: number; last: number; open: boolean; onToggle: () => void }) {
+  const cards = ["var(--chart-5)", "var(--chart-3)", "var(--main)"];
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={open}
+      aria-controls="more-projects"
+      className={cn(pressable, "text-left")}
+      style={{ background: "var(--chart-2)", color: "#000" }}
+    >
+      <div className="flex h-full flex-col p-3">
+        <div className="flex items-start justify-between gap-2">
+          <Tag>+{pad(count)}</Tag>
+          <span className="font-mono text-[11px] font-bold uppercase leading-4 tracking-wide">{open ? "Fold ↑" : "Deal ↓"}</span>
+        </div>
+        <div className="my-2.5 flex min-h-0 flex-1 items-center gap-12 pl-2">
+          <div className="relative aspect-[3/4] h-[78%] shrink-0" aria-hidden>
+            {cards.map((bg, n) => (
+              <span
+                key={n}
+                className="deck-card absolute inset-0 rounded-[4px] border-2 border-border"
+                style={{ background: bg, "--n": n } as CSSProperties}
+              >
+                {n === cards.length - 1 && (
+                  <svg viewBox="0 0 64 64" className="absolute inset-0 m-auto size-1/2">
+                    <polygon points={starPoints()} fill="var(--chart-2)" stroke="#000" strokeWidth="4" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </span>
+            ))}
+          </div>
+          <div className="min-w-0">
+            <p className="font-heading text-[clamp(1.1rem,1.6vw,1.45rem)] uppercase leading-[0.92] tracking-[-0.04em]">
+              {open ? "Fold the deck" : "Explore more"}
+            </p>
+            <p className="mt-1.5 text-sm leading-snug">{open ? "Back to the top ten" : `${count} more projects`}</p>
+          </div>
+        </div>
+        <p className="font-mono text-[11px] uppercase leading-[14px] tracking-wide">
+          {projectCode(first)} → {projectCode(last)}
+        </p>
+      </div>
+    </button>
+  );
+}
+
 export function LifeTile({ entry, dimmed }: { entry: LifeEntry; dimmed: boolean }) {
   const Icon = entry.icon;
   return (

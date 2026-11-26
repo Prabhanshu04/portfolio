@@ -20,6 +20,7 @@ Personal portfolio. Neobrutalism theme (neobrutalism.dev, fuchsia palette), buil
 - `featured: true` puts the “Now featured” sticker on a project (keep it on the topmost one).
 - Hovering a project tile breaks the solid block into squares that drop away to reveal its cover graphic.
 - Each project spread must stay under a **2-minute read** (≈440 words). The build prints a warning for any project over budget.
+- **Featured grid vs. deck:** projects placed in `layout.ts` are the featured grid. Every other project sits in the “Explore more” deck; opening it, or picking a filter that matches it, deals it into the grid. To promote a project, give it a slot in `layout.ts`.
 - Projects open as a pop-up from the grid and also have their own URL, e.g. `/work/visual-bypass`.
 
 ## Run locally

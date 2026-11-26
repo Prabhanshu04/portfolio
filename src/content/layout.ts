@@ -11,12 +11,18 @@
  * tiles flow into 2 or 4 columns.
  *
  * Any desktop cell not listed here is filled with a plain white square.
+ *
+ * Projects placed here are the featured grid. Every other project goes into
+ * the "Explore more" deck and is dealt into the grid (as 2×1 tiles, after
+ * the last body row) when the deck is opened or a filter matches it.
+ * The last row is the closing row (Let's talk, Worked with).
  */
 export type Slot =
   | { kind: "project"; slug: string; c: number; r: number; w: number; h: number }
   | { kind: "life"; slug: string; c: number; r: number }
   | { kind: "content"; id: "reminder" | "status" | "behind" | "talk"; c: number; r: number; w: number; h: number }
   | { kind: "partners"; c: number; r: number; w: number; h: number }
+  | { kind: "deck"; c: number; r: number; w: number; h: number }
   | { kind: "blank"; tone: "white" | "cream"; c: number; r: number; w?: number; h?: number; mobile?: boolean };
 
 export const slots: Slot[] = [
@@ -49,6 +55,8 @@ export const slots: Slot[] = [
   { kind: "project", slug: "onevibe", c: 6, r: 6, w: 2, h: 1 },
   { kind: "project", slug: "umang", c: 1, r: 7, w: 2, h: 1 },
   { kind: "blank", tone: "cream", c: 4, r: 7 },
+  // "Explore more": every project not placed above sits in this deck
+  { kind: "deck", c: 5, r: 7, w: 2, h: 1 },
   { kind: "blank", tone: "cream", c: 7, r: 7 },
 
   // Last row (Figma)
