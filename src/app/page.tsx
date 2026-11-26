@@ -17,7 +17,7 @@ export default function Home() {
           <LivingIndex />
           <div className="mt-3 flex flex-wrap justify-between gap-2 font-mono text-[11px] uppercase tracking-wide sm:text-xs">
             <p>{site.indexFootLeft}</p>
-            <p>{site.indexFootRight} ↗</p>
+            <p>{site.indexFootRight}</p>
           </div>
         </Frame>
       </main>

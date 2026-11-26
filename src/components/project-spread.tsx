@@ -3,8 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { FILTER_COLOR, filterLabel } from "@/content/filters";
 import type { LifeEntry } from "@/content/life";
-import { partnerLine } from "@/content/partners";
-import { coverOf, projects, STORY_SECTIONS, type Project } from "@/content/projects";
+import { coverOf, creditLine, projects, STORY_SECTIONS, type Project } from "@/content/projects";
 import { FeaturedSticker } from "./tiles";
 import { countWords, pad, WPM } from "@/lib/utils";
 import { buttonClass } from "./ui/button";
@@ -56,8 +55,8 @@ export function ProjectSpread({ project, inModal = false }: { project: Project; 
         <p className="mt-5 font-mono text-xs uppercase leading-relaxed tracking-wide">
           {project.type} · {project.location} · {project.year} · ≈ {minutes} min read
         </p>
-        {project.partners.length > 0 && (
-          <p className="mt-1 font-mono text-xs font-bold uppercase tracking-wide">With {partnerLine(project.partners)}</p>
+        {creditLine(project) && (
+          <p className="mt-1 font-mono text-xs font-bold uppercase tracking-wide">{creditLine(project)}</p>
         )}
 
         <div className="mt-4 flex flex-wrap gap-2">

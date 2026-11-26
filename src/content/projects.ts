@@ -1,5 +1,5 @@
 import type { FilterId } from "./filters";
-import type { PartnerId } from "./partners";
+import { partnerLine, type PartnerId } from "./partners";
 
 /**
  * One entry per project. Card fields come from the write-ups in the
@@ -32,6 +32,8 @@ export type Project = {
    * the spread. Defaults to /covers/<slug>.svg (a placeholder until replaced).
    */
   cover?: string;
+  /** Shown instead of "With …" when there are no partners, e.g. "Competition entry · KNDC" */
+  credit?: string;
   story: {
     problem?: string;
     context?: string;
@@ -371,6 +373,7 @@ export const projects: Project[] = [
   {
     slug: "bubble-to-bubbles",
     partners: [],
+    credit: "Competition entry · KNDC",
     number: 16,
     title: "Bubble to Bubbles",
     type: "Modular quarantine centre",
@@ -587,6 +590,10 @@ export const projects: Project[] = [
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
+
+/** "With TU Delft × TOTO", or the project's credit line when it has no partners. */
+export const creditLine = (p: Project, short = false) =>
+  p.partners.length ? `With ${partnerLine(p.partners, short)}` : p.credit;
 
 export const coverOf = (p: Project) => p.cover ?? `/covers/${p.slug}.svg`;
 

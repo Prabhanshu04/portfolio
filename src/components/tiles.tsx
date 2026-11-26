@@ -4,8 +4,8 @@ import { ArrowUpRight, RotateCw } from "lucide-react";
 import type { CSSProperties } from "react";
 import { FILTER_COLOR, filterLabel } from "@/content/filters";
 import type { LifeEntry } from "@/content/life";
-import { partnerLine, partners, type Partner } from "@/content/partners";
-import { coverOf, type Project } from "@/content/projects";
+import { partners, type Partner } from "@/content/partners";
+import { coverOf, creditLine, type Project } from "@/content/projects";
 import { contactHref, site } from "@/content/site";
 import { cn, pad, projectCode } from "@/lib/utils";
 import { starPoints } from "./star";
@@ -50,7 +50,7 @@ export function FeaturedSticker({ className }: { className?: string }) {
 export function ProjectTile({ project, w, h, dimmed }: { project: Project; w: number; h: number; dimmed: boolean }) {
   const color = FILTER_COLOR[project.filters[0]];
   const caption = project.filters.slice(0, 2).map(filterLabel).join(" + ");
-  const withLine = partnerLine(project.partners, true);
+  const withLine = creditLine(project, true);
   const name = project.tileTitle ?? project.title;
   const big = w >= 2 && h >= 2;
   const cover = coverOf(project);
@@ -135,7 +135,7 @@ export function ProjectTile({ project, w, h, dimmed }: { project: Project; w: nu
           </span>
           {withLine && !dimmed && (
             <span className="absolute inset-0 truncate opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100">
-              With {withLine}
+              {withLine}
             </span>
           )}
         </p>
