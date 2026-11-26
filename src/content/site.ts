@@ -7,7 +7,9 @@ export const site = {
   initials: "ps.",
   year: 2026,
   tagline: "A personal edge of the internet",
-  status: "Open for good collaborations",
+  status: "Open for product + service design roles",
+  /** The CV PDF lives in public/ — replace the file to update it */
+  cv: "/Prabhanshu-Sharma-CV.pdf",
   description:
     "Service designer working on AI products and services, innovation and strategy. MSc Strategic Product Design, TU Delft.",
 

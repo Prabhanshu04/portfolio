@@ -10,15 +10,26 @@ export function SiteHeader() {
         </span>
         <span className="font-mono text-xs font-bold uppercase tracking-wide">{site.tagline}</span>
       </Link>
-      <a href={contactHref} className="flex items-center gap-2 font-mono text-xs uppercase tracking-wide hover:underline">
-        <span
-          aria-hidden
-          className="size-2.5 rounded-full border border-border bg-main"
-          style={{ animation: "pulse-dot 2s ease-in-out infinite" }}
-        />
-        {site.status}
-        <span aria-hidden>↗</span>
-      </a>
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-xs uppercase tracking-wide">
+        <a href={contactHref} className="flex items-center gap-2 hover:underline">
+          <span
+            aria-hidden
+            className="size-2.5 shrink-0 rounded-full border border-border bg-main"
+            style={{ animation: "pulse-dot 2s ease-in-out infinite" }}
+          />
+          {site.status}
+          <span aria-hidden>↗</span>
+        </a>
+        <a
+          href={site.cv}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-b-2 border-border font-bold hover:bg-main"
+          aria-label="CV (PDF, opens in a new tab)"
+        >
+          CV <span aria-hidden>↗</span>
+        </a>
+      </div>
     </header>
   );
 }
