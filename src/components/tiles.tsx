@@ -1,11 +1,14 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, RotateCw } from "lucide-react";
 import type { CSSProperties } from "react";
 import { FILTER_COLOR, filterLabel } from "@/content/filters";
 import type { LifeEntry } from "@/content/life";
-import type { Project } from "@/content/projects";
+import { partnerLine, partners, type Partner } from "@/content/partners";
+import { coverOf, type Project } from "@/content/projects";
 import { contactHref, site } from "@/content/site";
-import { cn, projectCode } from "@/lib/utils";
+import { cn, pad, projectCode } from "@/lib/utils";
+import { starPoints } from "./star";
 import { Tag } from "./ui/tag";
 
 /**
@@ -20,36 +23,99 @@ const pressable =
 
 const flattened = "press-tile z-0 flex flex-col overflow-hidden";
 
+/** Deterministic scatter so squares drop away in a random-looking order. */
+function scatter(n: number) {
+  return Array.from({ length: n }, (_, i) => i)
+    .map((i) => ({ i, k: (Math.imul(i + 1, 2654435761) >>> 0) % 9973 }))
+    .sort((a, b) => a.k - b.k)
+    .reduce<number[]>((order, { i }, rank) => ((order[i] = rank), order), []);
+}
+
+export function FeaturedSticker({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex -rotate-2 items-center gap-1 border border-border bg-foreground px-1.5 py-[3px] font-mono text-[11px] font-bold uppercase leading-none tracking-wide text-chart-2",
+        className,
+      )}
+    >
+      <svg viewBox="0 0 64 64" className="size-3" aria-hidden>
+        <polygon points={starPoints()} fill="currentColor" />
+      </svg>
+      Now featured
+    </span>
+  );
+}
+
 export function ProjectTile({ project, w, h, dimmed }: { project: Project; w: number; h: number; dimmed: boolean }) {
   const color = FILTER_COLOR[project.filters[0]];
   const caption = project.filters.slice(0, 2).map(filterLabel).join(" + ");
+  const withLine = partnerLine(project.partners, true);
   const name = project.tileTitle ?? project.title;
   const big = w >= 2 && h >= 2;
+  const cover = coverOf(project);
 
-  // Hover subdivision: two squares per cell across, two per cell down
-  const cols = w * 2;
-  const rows = h * 2;
-  const squares = Array.from({ length: cols * rows }, (_, i) => i);
+  // The solid block splits into a grid of small squares that drop away on hover
+  const cols = w * 3;
+  const rows = h * 3;
+  const n = cols * rows;
+  const order = scatter(n);
 
   return (
     <Link
       href={`/work/${project.slug}`}
       scroll={false}
-      aria-label={`${name}: open project`}
+      aria-label={`${name}${project.featured ? " (now featured)" : ""}: open project`}
       tabIndex={dimmed ? -1 : undefined}
       aria-hidden={dimmed || undefined}
       className={cn(dimmed ? flattened : pressable)}
       style={{ background: dimmed ? "var(--secondary-background)" : color.bg, color: color.fg }}
     >
       <div className={cn("flex h-full flex-col p-3", dimmed && "opacity-25 grayscale")}>
-        <div className="flex items-start justify-between">
-          <Tag>{projectCode(project.number)}</Tag>
-          <ArrowUpRight className="size-4 transition-transform group-hover:rotate-45" strokeWidth={1.75} />
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Tag>{projectCode(project.number)}</Tag>
+            {project.featured && <FeaturedSticker />}
+          </div>
+          <ArrowUpRight className="size-4 shrink-0 transition-transform group-hover:rotate-45" strokeWidth={1.75} />
         </div>
 
-        <div className="relative my-2.5 min-h-0 flex-1">
-          {/* Placeholder until the project graphic arrives */}
-          <div className="flex h-full flex-col justify-center border border-dashed border-current px-3">
+        <div className="relative my-2.5 min-h-0 flex-1 overflow-hidden">
+          {!dimmed && (
+            <>
+              {/* Cover graphic, revealed on hover */}
+              <Image
+                src={cover}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 300px, 50vw"
+                unoptimized={cover.endsWith(".svg")}
+                className="cover-img object-cover"
+              />
+              {/* The solid block, made of squares that drop away one after another */}
+              <div
+                aria-hidden
+                className="absolute inset-0 grid"
+                style={{ gridTemplateColumns: `repeat(${cols}, 1fr)`, gridTemplateRows: `repeat(${rows}, 1fr)` }}
+              >
+                {order.map((rank, i) => (
+                  <span
+                    key={i}
+                    className="cover-square"
+                    style={{ "--d": `${Math.round((rank / n) * 280)}ms`, background: color.bg } as CSSProperties}
+                  />
+                ))}
+              </div>
+              {/* Grid lines over the revealed graphic */}
+              <div
+                aria-hidden
+                className="cover-lines absolute inset-0 border border-border"
+                style={{ backgroundSize: `calc(100% / ${cols}) calc(100% / ${rows})` }}
+              />
+            </>
+          )}
+
+          <div className="cover-title relative flex h-full flex-col justify-center">
             <p
               className={cn(
                 "font-heading uppercase leading-[0.92] tracking-[-0.04em]",
@@ -60,32 +126,19 @@ export function ProjectTile({ project, w, h, dimmed }: { project: Project; w: nu
             </p>
             {big && <p className="mt-3 max-w-[22ch] text-sm leading-snug opacity-80">{project.hook}</p>}
           </div>
-
-          {/* Subdivision: the square splits into small squares, each with a project icon */}
-          {!dimmed && (
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 grid gap-px bg-border opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
-              style={{ gridTemplateColumns: `repeat(${cols}, 1fr)`, gridTemplateRows: `repeat(${rows}, 1fr)`, border: "1px solid var(--border)" }}
-            >
-              {squares.map((i) => {
-                const Icon = project.icons[(i * 5 + Math.floor(i / cols)) % project.icons.length];
-                const light = (i + Math.floor(i / cols)) % 2 === 0;
-                return (
-                  <div
-                    key={i}
-                    className="sub-square grid place-items-center"
-                    style={{ "--i": i, background: light ? "var(--secondary-background)" : color.bg, color: light ? "#000" : color.fg } as CSSProperties}
-                  >
-                    <Icon className="size-[clamp(16px,1.6vw,22px)]" strokeWidth={1.75} />
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </div>
 
-        <p className="truncate font-mono text-[11px] uppercase tracking-wide">{caption}</p>
+        {/* Categories at rest; who it was with on hover */}
+        <p className="relative h-[14px] font-mono text-[11px] uppercase leading-[14px] tracking-wide">
+          <span className="block truncate transition-opacity duration-150 group-hover:opacity-0 group-focus-visible:opacity-0">
+            {caption}
+          </span>
+          {withLine && !dimmed && (
+            <span className="absolute inset-0 truncate opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100">
+              With {withLine}
+            </span>
+          )}
+        </p>
       </div>
     </Link>
   );
@@ -114,6 +167,51 @@ export function LifeTile({ entry, dimmed }: { entry: LifeEntry; dimmed: boolean 
         <p className="font-mono text-[11px] uppercase leading-tight tracking-wide">{entry.title}</p>
       </div>
     </Link>
+  );
+}
+
+function PartnerMark({ partner }: { partner: Partner }) {
+  if (partner.logo) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={partner.logo} alt={partner.name} className="h-9 w-auto max-w-none" />
+    );
+  }
+  return (
+    <span className="font-heading text-[clamp(1.5rem,2.4vw,2rem)] whitespace-nowrap uppercase leading-none tracking-[-0.035em]">
+      {partner.name}
+    </span>
+  );
+}
+
+/** "Worked with": a moving rail of partners. Pauses on hover; static with reduced motion. */
+export function PartnersRail() {
+  const row = (copy: number) => (
+    <ul aria-hidden={copy === 1 || undefined} className="flex shrink-0 items-center">
+      {partners.map((p) => (
+        <li key={p.id} className="flex items-center gap-6 pr-6">
+          <PartnerMark partner={p} />
+          <svg viewBox="0 0 64 64" className="size-6 shrink-0" aria-hidden>
+            <polygon points={starPoints()} fill="var(--main)" stroke="#000" strokeWidth="4" strokeLinejoin="round" />
+          </svg>
+        </li>
+      ))}
+    </ul>
+  );
+  return (
+    <section aria-label="Worked with" className="flex h-full flex-col justify-between overflow-hidden bg-secondary-background py-4">
+      <p className="flex justify-between px-4 font-mono text-[11px] uppercase tracking-wide">
+        <span>Worked with</span>
+        <span>{pad(partners.length)} partners</span>
+      </p>
+      <div className="marquee overflow-hidden border-y-2 border-border bg-chart-2 py-3">
+        <div className="marquee-track flex w-max">
+          {row(0)}
+          {row(1)}
+        </div>
+      </div>
+      <p className="px-4 font-mono text-[11px] uppercase tracking-wide">Schools, studios and clients.</p>
+    </section>
   );
 }
 

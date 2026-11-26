@@ -10,7 +10,7 @@ import { life } from "@/content/life";
 import { site } from "@/content/site";
 import { cn, pad } from "@/lib/utils";
 import { buttonClass } from "./ui/button";
-import { ContentTile, LifeTile, ProjectTile } from "./tiles";
+import { ContentTile, LifeTile, PartnersRail, ProjectTile } from "./tiles";
 
 type Active = FilterId | "all";
 
@@ -97,6 +97,13 @@ export function LivingIndex() {
             return (
               <div key={s.id} className="cell" style={place(s.c, s.r, s.w, s.h)}>
                 <ContentTile id={s.id} />
+              </div>
+            );
+          }
+          if (s.kind === "partners") {
+            return (
+              <div key="partners" className="cell" style={place(s.c, s.r, s.w, s.h)}>
+                <PartnersRail />
               </div>
             );
           }

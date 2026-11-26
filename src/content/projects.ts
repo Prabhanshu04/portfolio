@@ -1,46 +1,5 @@
-import type { LucideIcon } from "lucide-react";
-import {
-  AudioLines,
-  Bot,
-  Building2,
-  CalendarCheck,
-  ChartColumn,
-  Code,
-  Coins,
-  Compass,
-  Cpu,
-  Droplet,
-  Euro,
-  Factory,
-  Gauge,
-  Globe,
-  HeartPulse,
-  House,
-  Languages,
-  Layers,
-  Leaf,
-  Map,
-  MessageCircle,
-  Network,
-  Newspaper,
-  Phone,
-  Presentation,
-  Radar,
-  Recycle,
-  Route,
-  Scale,
-  ShieldCheck,
-  Smile,
-  Stethoscope,
-  Store,
-  Sun,
-  Telescope,
-  Users,
-  Video,
-  Waves,
-  Workflow,
-} from "lucide-react";
 import type { FilterId } from "./filters";
+import type { PartnerId } from "./partners";
 
 /**
  * One entry per project. Card fields come from the write-ups in the
@@ -64,8 +23,15 @@ export type Project = {
   about: string;
   results: string[];
   skills: string[];
-  /** Icons shown in the squares when the tile subdivides on hover */
-  icons: LucideIcon[];
+  /** Organisations worked with (ids from partners.ts) */
+  partners: PartnerId[];
+  /** Shows the "Now featured" sticker. Put it on the topmost project. */
+  featured?: boolean;
+  /**
+   * Cover graphic revealed when the tile is hovered, and shown at the top of
+   * the spread. Defaults to /covers/<slug>.svg (a placeholder until replaced).
+   */
+  cover?: string;
   story: {
     problem?: string;
     context?: string;
@@ -78,6 +44,8 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "visual-bypass",
+    partners: ["tu-delft"],
+    featured: true,
     number: 1,
     title: "Visual Bypass",
     type: "Graduation project (MSc thesis)",
@@ -94,11 +62,11 @@ export const projects: Project[] = [
       "Found the same design cost 4× more on GPT-5.4, and traced the cause to how that provider reuses stored instructions",
     ],
     skills: ["Research design", "Systems thinking", "Interaction design", "Statistical analysis", "Python", "Gemini & OpenAI APIs", "Prompt design", "Figma"],
-    icons: [Languages, Coins, HeartPulse, Radar, Code, ChartColumn],
     story: {},
   },
   {
     slug: "livenworld",
+    partners: ["aaif"],
     number: 2,
     title: "LivenWorld",
     type: "AI product for newcomers",
@@ -115,11 +83,11 @@ export const projects: Project[] = [
       "Led the development team and presented the final pitch, framing LivenChat as a “Universal Companion”",
     ],
     skills: ["Project leadership", "System architecture", "Service design", "Trust & transparency design", "RAG", "Pitching"],
-    icons: [Route, Map, ShieldCheck, MessageCircle, Users, Compass],
     story: {},
   },
   {
     slug: "careconnect",
+    partners: ["tu-delft", "erasmus-mc", "juvoly"],
     number: 3,
     title: "CareConnect",
     type: "Systemic service design for Erasmus MC & Juvoly",
@@ -136,11 +104,11 @@ export const projects: Project[] = [
       "Set up a team AI workflow: a 3-part prompt structure and cross-checking answers across up to 6 AI tools",
     ],
     skills: ["Systems thinking", "Service blueprint", "Roadmapping", "Hypothesis-driven design", "Stakeholder mapping", "AI-assisted prototyping"],
-    icons: [Stethoscope, Network, Workflow, Users, Layers, Code],
     story: {},
   },
   {
     slug: "ksia",
+    partners: ["ksia", "tu-delft"],
     number: 4,
     title: "KSIA × Flight Case: futures of chip-making equipment",
     tileTitle: "KSIA: chip-making futures",
@@ -158,11 +126,11 @@ export const projects: Project[] = [
       "Designed a 3-part prompt framework to visualise each future with AI, then presented the strategy to KSIA in Seoul",
     ],
     skills: ["Strategic foresight", "Scenario planning", "Signal and trend research", "Industry analysis", "AI image generation", "Visual storytelling"],
-    icons: [Cpu, Droplet, Globe, Telescope, Factory, Users],
     story: {},
   },
   {
     slug: "toto-stream",
+    partners: ["toto", "tu-delft"],
     number: 5,
     title: "TOTO × Flight Case: the STREAM toolbox",
     tileTitle: "TOTO: the STREAM toolbox",
@@ -180,11 +148,11 @@ export const projects: Project[] = [
       "Delivered 2 concepts plus a privacy model where users choose what to share",
     ],
     skills: ["Design toolbox creation", "Service blueprint", "Personas", "Journey mapping", "Privacy-by-design", "Smart home & IoT"],
-    icons: [Droplet, HeartPulse, House, Users, ShieldCheck, Workflow],
     story: {},
   },
   {
     slug: "sampoorna",
+    partners: ["spa-vijayawada"],
     number: 6,
     title: "Sampoorna",
     type: "B.Arch thesis",
@@ -201,11 +169,11 @@ export const projects: Project[] = [
       "Proposed fast, low-cost GFRG panel construction: a house in 60 days at up to 30% lower cost",
     ],
     skills: ["Site surveys", "Urban design", "Housing design", "Incremental design", "Universal design", "Revit"],
-    icons: [House, Building2, Users, Sun, Leaf, Layers],
     story: {},
   },
   {
     slug: "unlearn",
+    partners: ["tu-delft"],
     number: 7,
     title: "Unlearn: a speculative future of AI in schools",
     tileTitle: "Unlearn",
@@ -223,11 +191,11 @@ export const projects: Project[] = [
       "Staged and filmed the “Unlearn” graffiti action as if it were happening in that future",
     ],
     skills: ["Value sensitive design", "Stakeholder mapping", "Speculative design", "Design fiction", "Web page design", "Video production"],
-    icons: [Scale, Users, Newspaper, Video, Telescope, ShieldCheck],
     story: {},
   },
   {
     slug: "ava",
+    partners: ["aaif"],
     number: 8,
     title: "AVA: the invisible receptionist",
     tileTitle: "AVA",
@@ -245,11 +213,11 @@ export const projects: Project[] = [
       "Designed an experience with no screen at all, where trust comes from a reliable conversation",
     ],
     skills: ["User interviews", "Voice & conversation design", "Go-to-market", "Website deployment", "Survey design", "Pricing validation"],
-    icons: [Phone, AudioLines, CalendarCheck, Bot, Euro, MessageCircle],
     story: {},
   },
   {
     slug: "onevibe",
+    partners: ["aaif"],
     number: 9,
     title: "OneVibe: culture you can measure",
     tileTitle: "OneVibe",
@@ -267,11 +235,11 @@ export const projects: Project[] = [
       "Delivered in a 4-week sprint, my first at the venture builder",
     ],
     skills: ["Service blueprint", "Privacy-by-design", "Rapid prototyping", "Dashboard design", "Data storytelling", "Investor deck"],
-    icons: [Smile, Gauge, Users, ShieldCheck, ChartColumn, Presentation],
     story: {},
   },
   {
     slug: "umang",
+    partners: ["nasa-india"],
     number: 10,
     title: "Umang",
     type: "Urban revitalisation",
@@ -288,12 +256,13 @@ export const projects: Project[] = [
       "Showed the approach could work in 6 other dense cities, from Delhi to Hong Kong",
     ],
     skills: ["Urban research", "Mapping", "Systems thinking", "Urban design", "Modular design", "Hand sketching"],
-    icons: [Waves, Droplet, Store, Recycle, Building2, Users],
     story: {},
   },
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
+
+export const coverOf = (p: Project) => p.cover ?? `/covers/${p.slug}.svg`;
 
 export const STORY_SECTIONS = [
   { key: "problem", label: "Problem", budget: 60 },

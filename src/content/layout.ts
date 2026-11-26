@@ -16,6 +16,7 @@ export type Slot =
   | { kind: "project"; slug: string; c: number; r: number; w: number; h: number }
   | { kind: "life"; slug: string; c: number; r: number }
   | { kind: "content"; id: "reminder" | "status" | "behind" | "talk"; c: number; r: number; w: number; h: number }
+  | { kind: "partners"; c: number; r: number; w: number; h: number }
   | { kind: "blank"; tone: "white" | "cream"; c: number; r: number; w?: number; h?: number; mobile?: boolean };
 
 export const slots: Slot[] = [
@@ -53,5 +54,5 @@ export const slots: Slot[] = [
   // Last row (Figma)
   { kind: "content", id: "talk", c: 2, r: 8, w: 2, h: 1 },
   { kind: "blank", tone: "cream", c: 4, r: 8 },
-  { kind: "blank", tone: "white", c: 5, r: 8, w: 4, h: 1 },
+  { kind: "partners", c: 5, r: 8, w: 4, h: 1 },
 ];

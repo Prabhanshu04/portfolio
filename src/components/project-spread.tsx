@@ -1,8 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ImageIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { FILTER_COLOR, filterLabel } from "@/content/filters";
 import type { LifeEntry } from "@/content/life";
-import { projects, STORY_SECTIONS, type Project } from "@/content/projects";
+import { partnerLine } from "@/content/partners";
+import { coverOf, projects, STORY_SECTIONS, type Project } from "@/content/projects";
+import { FeaturedSticker } from "./tiles";
 import { countWords, pad, WPM } from "@/lib/utils";
 import { buttonClass } from "./ui/button";
 import { Tag } from "./ui/tag";
@@ -12,20 +15,10 @@ export function readingMinutes(p: Project) {
   return { words, minutes: Math.max(1, Math.round(words / WPM)) };
 }
 
-function GraphicPlaceholder({ label = "Insert project graphic", tall = false }: { label?: string; tall?: boolean }) {
-  return (
-    <div
-      className={`flex flex-col items-center justify-center gap-3 border border-dashed border-current ${tall ? "h-56 sm:h-52" : "h-36"}`}
-    >
-      <ImageIcon className="size-12" strokeWidth={1.25} />
-      <p className="font-mono text-xs">[ {label} ]</p>
-    </div>
-  );
-}
-
 /** The project "spread": used inside the pop-up and on the full /work page. */
 export function ProjectSpread({ project, inModal = false }: { project: Project; inModal?: boolean }) {
   const color = FILTER_COLOR[project.filters[0]];
+  const cover = coverOf(project);
   const { minutes } = readingMinutes(project);
   const i = projects.findIndex((p) => p.slug === project.slug);
   const prev = projects[(i - 1 + projects.length) % projects.length];
@@ -34,14 +27,27 @@ export function ProjectSpread({ project, inModal = false }: { project: Project; 
   return (
     <article>
       {/* Cover band */}
-      <div className="border-b-2 border-border px-6 py-8 sm:px-12 sm:py-12" style={{ background: color.bg, color: color.fg }}>
-        <GraphicPlaceholder tall />
+      <div className="border-b-2 border-border p-6 sm:p-10" style={{ background: color.bg }}>
+        <div className="relative aspect-[16/10] overflow-hidden border-2 border-border bg-secondary-background">
+          <Image
+            src={cover}
+            alt={`Cover graphic for ${project.title}`}
+            fill
+            sizes="(min-width: 768px) 690px, 100vw"
+            unoptimized={cover.endsWith(".svg")}
+            className="object-cover"
+            priority={inModal}
+          />
+        </div>
       </div>
 
       <div className="px-6 py-8 sm:px-8">
-        <p className="font-mono text-xs uppercase tracking-wide">
-          {project.filters.slice(0, 2).map(filterLabel).join(" + ")}
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="font-mono text-xs uppercase tracking-wide">
+            {project.filters.slice(0, 2).map(filterLabel).join(" + ")}
+          </p>
+          {project.featured && <FeaturedSticker />}
+        </div>
         <h2 className="mt-1 font-heading text-[clamp(1.9rem,4.5vw,2.6rem)] leading-[1.02] tracking-[-0.035em]">
           {project.title}
         </h2>
@@ -50,6 +56,9 @@ export function ProjectSpread({ project, inModal = false }: { project: Project; 
         <p className="mt-5 font-mono text-xs uppercase leading-relaxed tracking-wide">
           {project.type} · {project.location} · {project.year} · ≈ {minutes} min read
         </p>
+        {project.partners.length > 0 && (
+          <p className="mt-1 font-mono text-xs font-bold uppercase tracking-wide">With {partnerLine(project.partners)}</p>
+        )}
 
         <div className="mt-4 flex flex-wrap gap-2">
           {project.filters.map((f) => (
