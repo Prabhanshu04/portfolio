@@ -10,6 +10,8 @@ Personal portfolio. Neobrutalism theme (neobrutalism.dev, fuchsia palette), buil
 | Projects (card text, results, spread story) | `src/content/projects.ts` |
 | Life tiles | `src/content/life.ts` |
 | Partners in the “Worked with” rail | `src/content/partners.ts` |
+| Pop-up text and figures (problem → solution) | `src/content/spreads/` |
+| Graphics inside the pop-ups | `public/work/<slug>/<id>.webp` — see `GRAPHICS.md` |
 | Project cover graphics | `public/covers/<slug>.svg` (or set `cover` in projects.ts) |
 | Partner logos | `public/logos/` (then set `logo` in partners.ts) |
 | Where each square sits in the grid | `src/content/layout.ts` |

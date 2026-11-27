@@ -5,9 +5,8 @@ import { partnerLine, type PartnerId } from "./partners";
  * One entry per project. Card fields come from the write-ups in the
  * "Believe in yourself" project (portfolio/NN-*.md).
  *
- * `story` holds the five short sections of the pop-up spread. They are
- * empty for now: we distil them project by project (≈400 words in total,
- * so the whole spread stays under a 2-minute read).
+ * The pop-up text (problem, context, approach, solution) and its graphics
+ * live in spreads/. The whole spread stays under a 2-minute read.
  */
 export type Project = {
   slug: string;
@@ -34,13 +33,6 @@ export type Project = {
   cover?: string;
   /** Shown instead of "With …" when there are no partners, e.g. "Competition entry · KNDC" */
   credit?: string;
-  story: {
-    problem?: string;
-    context?: string;
-    approach?: string;
-    solution?: string;
-    results?: string;
-  };
 };
 
 export const projects: Project[] = [
@@ -64,7 +56,6 @@ export const projects: Project[] = [
       "Found the same design cost 4× more on GPT-5.4, and traced the cause to how that provider reuses stored instructions",
     ],
     skills: ["Research design", "Systems thinking", "Interaction design", "Statistical analysis", "Python", "Gemini & OpenAI APIs", "Prompt design", "Figma"],
-    story: {},
   },
   {
     slug: "livenworld",
@@ -85,7 +76,6 @@ export const projects: Project[] = [
       "Led the development team and presented the final pitch, framing LivenChat as a “Universal Companion”",
     ],
     skills: ["Project leadership", "System architecture", "Service design", "Trust & transparency design", "RAG", "Pitching"],
-    story: {},
   },
   {
     slug: "careconnect",
@@ -106,7 +96,6 @@ export const projects: Project[] = [
       "Set up a team AI workflow: a 3-part prompt structure and cross-checking answers across up to 6 AI tools",
     ],
     skills: ["Systems thinking", "Service blueprint", "Roadmapping", "Hypothesis-driven design", "Stakeholder mapping", "AI-assisted prototyping"],
-    story: {},
   },
   {
     slug: "ksia",
@@ -128,7 +117,6 @@ export const projects: Project[] = [
       "Designed a 3-part prompt framework to visualise each future with AI, then presented the strategy to KSIA in Seoul",
     ],
     skills: ["Strategic foresight", "Scenario planning", "Signal and trend research", "Industry analysis", "AI image generation", "Visual storytelling"],
-    story: {},
   },
   {
     slug: "toto-stream",
@@ -150,7 +138,6 @@ export const projects: Project[] = [
       "Delivered 2 concepts plus a privacy model where users choose what to share",
     ],
     skills: ["Design toolbox creation", "Service blueprint", "Personas", "Journey mapping", "Privacy-by-design", "Smart home & IoT"],
-    story: {},
   },
   {
     slug: "sampoorna",
@@ -171,7 +158,6 @@ export const projects: Project[] = [
       "Proposed fast, low-cost GFRG panel construction: a house in 60 days at up to 30% lower cost",
     ],
     skills: ["Site surveys", "Urban design", "Housing design", "Incremental design", "Universal design", "Revit"],
-    story: {},
   },
   {
     slug: "unlearn",
@@ -193,7 +179,6 @@ export const projects: Project[] = [
       "Staged and filmed the “Unlearn” graffiti action as if it were happening in that future",
     ],
     skills: ["Value sensitive design", "Stakeholder mapping", "Speculative design", "Design fiction", "Web page design", "Video production"],
-    story: {},
   },
   {
     slug: "ava",
@@ -215,7 +200,6 @@ export const projects: Project[] = [
       "Designed an experience with no screen at all, where trust comes from a reliable conversation",
     ],
     skills: ["User interviews", "Voice & conversation design", "Go-to-market", "Website deployment", "Survey design", "Pricing validation"],
-    story: {},
   },
   {
     slug: "onevibe",
@@ -237,7 +221,6 @@ export const projects: Project[] = [
       "Delivered in a 4-week sprint, my first at the venture builder",
     ],
     skills: ["Service blueprint", "Privacy-by-design", "Rapid prototyping", "Dashboard design", "Data storytelling", "Investor deck"],
-    story: {},
   },
   {
     slug: "umang",
@@ -258,7 +241,6 @@ export const projects: Project[] = [
       "Showed the approach could work in 6 other dense cities, from Delhi to Hong Kong",
     ],
     skills: ["Urban research", "Mapping", "Systems thinking", "Urban design", "Modular design", "Hand sketching"],
-    story: {},
   },
   // ---- The deck: projects 11–25 (not placed in the grid layout) ----
   {
@@ -281,7 +263,6 @@ export const projects: Project[] = [
       "Positioned strategic design across 3 levels of change: technology, healthcare system and society",
     ],
     skills: ["Technology foresight", "Strategic design", "Ethical impact assessment", "Scenario planning", "Technology readiness assessment", "Illustration"],
-    story: {},
   },
   {
     slug: "juvoly",
@@ -303,7 +284,6 @@ export const projects: Project[] = [
       "Proposed Override & Annotate, in line with the EU AI Act’s call for human oversight",
     ],
     skills: ["Value sensitive design", "Stakeholder analysis", "Responsible AI", "EU AI Act", "Value scenarios", "Sketching"],
-    story: {},
   },
   {
     slug: "yees",
@@ -325,7 +305,6 @@ export const projects: Project[] = [
       "Delivered a 5-year roadmap to 2030 and a cost plan (€35,500–€86,000), starting with a pilot in Kenya",
     ],
     skills: ["Strategic design", "System design", "Benchmarking", "Roadmapping", "Prototyping", "Usability testing"],
-    story: {},
   },
   {
     slug: "urban-mosaic",
@@ -346,7 +325,6 @@ export const projects: Project[] = [
       "Redesigned 3 key junctions and planned 7 layers, from streets and cycle tracks to flood management",
     ],
     skills: ["Urban research", "Interviews", "Land use mapping", "Urban design", "Master planning", "Landscape & water design"],
-    story: {},
   },
   {
     slug: "postnl",
@@ -368,7 +346,6 @@ export const projects: Project[] = [
       "Set a target to raise employee engagement from 68 to 80, linked to 6 UN SDGs",
     ],
     skills: ["Organisational strategy", "Digital transformation", "Service blueprinting", "Change management", "Stakeholder mapping", "Prototyping"],
-    story: {},
   },
   {
     slug: "bubble-to-bubbles",
@@ -390,7 +367,6 @@ export const projects: Project[] = [
       "Grouped 3 units into a block and 3 blocks into a cluster around a shared courtyard",
     ],
     skills: ["Modular design", "Rapid response design", "Cost estimation", "Site planning", "Systems thinking", "SketchUp"],
-    story: {},
   },
   {
     slug: "swapfiets",
@@ -412,7 +388,6 @@ export const projects: Project[] = [
       "Designed Swapflex, a 6-step service to use a bike in another city with existing bikes and shops",
     ],
     skills: ["Strategic design", "Roadmapping", "Customer journey mapping", "Competitor positioning", "User interviews", "Lean thinking"],
-    story: {},
   },
   {
     slug: "samartha",
@@ -434,7 +409,6 @@ export const projects: Project[] = [
       "Paired the housing with a resident app for homes, services and community activities",
     ],
     skills: ["Site analysis", "User research", "Housing design", "Community space design", "App concept", "Visualisation"],
-    story: {},
   },
   {
     slug: "siplab",
@@ -455,7 +429,6 @@ export const projects: Project[] = [
       "Built a financial plan with break-even in month 9, and pitched for €160,000 for 25%",
     ],
     skills: ["Venture design", "Business planning", "Market sizing", "Financial modelling", "Concept validation", "Pitching"],
-    story: {},
   },
   {
     slug: "mobius",
@@ -477,7 +450,6 @@ export const projects: Project[] = [
       "Offered 7 unit types, from small affordable flats to large 4-bedroom homes",
     ],
     skills: ["Neighbourhood survey", "User group mapping", "Placemaking", "Housing design", "Structural systems", "Passive design"],
-    story: {},
   },
   {
     slug: "ai-lab",
@@ -499,7 +471,6 @@ export const projects: Project[] = [
       "Built a neural network that predicted “premium” houses with 94.5% accuracy",
     ],
     skills: ["Python", "PyTorch", "Natural language processing", "Topic modelling", "GANs", "AI-assisted coding"],
-    story: {},
   },
   {
     slug: "mygut",
@@ -521,7 +492,6 @@ export const projects: Project[] = [
       "Built and tested a working prototype in Botpress with a connected knowledge base",
     ],
     skills: ["Conversation design", "AI agent design", "Prompt writing", "Guardrail design", "Botpress", "Prototyping"],
-    story: {},
   },
   {
     slug: "repacking-perceptions",
@@ -542,7 +512,6 @@ export const projects: Project[] = [
       "Found no difference in perceived quality: the barrier is convenience, not quality",
     ],
     skills: ["Experimental design", "Quantitative research", "Survey design", "Statistical analysis", "Qualtrics", "SPSS"],
-    story: {},
   },
   {
     slug: "chasing-light",
@@ -564,7 +533,6 @@ export const projects: Project[] = [
       "Proposed “Canon Infinity”, a modular, repairable camera line",
     ],
     skills: ["Storytelling", "Essay writing", "Business model analysis", "Marketing strategy", "Circular design", "Brand positioning"],
-    story: {},
   },
   {
     slug: "more-architecture",
@@ -585,7 +553,6 @@ export const projects: Project[] = [
       "Covered 3 contexts: a holy city, a megacity and a mountain village",
     ],
     skills: ["Site analysis", "Climate-responsive design", "Mixed-use design", "Construction drawings", "Physical models", "Revit"],
-    story: {},
   },
 ];
 
@@ -596,11 +563,3 @@ export const creditLine = (p: Project, short = false) =>
   p.partners.length ? `With ${partnerLine(p.partners, short)}` : p.credit;
 
 export const coverOf = (p: Project) => p.cover ?? `/covers/${p.slug}.svg`;
-
-export const STORY_SECTIONS = [
-  { key: "problem", label: "Problem", budget: 60 },
-  { key: "context", label: "Context", budget: 60 },
-  { key: "approach", label: "Approach", budget: 80 },
-  { key: "solution", label: "Solution", budget: 80 },
-  { key: "results", label: "Results", budget: 60 },
-] as const;

@@ -3,14 +3,18 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { FILTER_COLOR, filterLabel } from "@/content/filters";
 import type { LifeEntry } from "@/content/life";
-import { coverOf, creditLine, projects, STORY_SECTIONS, type Project } from "@/content/projects";
+import { coverOf, creditLine, projects, type Project } from "@/content/projects";
+import { getSpread, SECTIONS } from "@/content/spreads";
+import { SpreadFigure } from "./figure";
 import { FeaturedSticker } from "./tiles";
 import { countWords, pad, WPM } from "@/lib/utils";
 import { buttonClass } from "./ui/button";
 import { Tag } from "./ui/tag";
 
 export function readingMinutes(p: Project) {
-  const words = countWords(p.hook, p.about, ...p.results, ...Object.values(p.story));
+  const spread = getSpread(p.slug);
+  const story = spread ? SECTIONS.map((s) => spread[s.key].text) : [];
+  const words = countWords(p.hook, p.about, ...p.results, ...story);
   return { words, minutes: Math.max(1, Math.round(words / WPM)) };
 }
 
@@ -19,6 +23,7 @@ export function ProjectSpread({ project, inModal = false }: { project: Project; 
   const color = FILTER_COLOR[project.filters[0]];
   const cover = coverOf(project);
   const { minutes } = readingMinutes(project);
+  const spread = getSpread(project.slug);
   const i = projects.findIndex((p) => p.slug === project.slug);
   const prev = projects[(i - 1 + projects.length) % projects.length];
   const next = projects[(i + 1) % projects.length];
@@ -69,37 +74,40 @@ export function ProjectSpread({ project, inModal = false }: { project: Project; 
 
         <p className="mt-7 max-w-[60ch] text-[17px] leading-relaxed">{project.about}</p>
 
-        {/* Results */}
-        <h3 className="mt-9 font-mono text-xs font-normal uppercase tracking-wide">Results</h3>
-        <ol className="mt-3 grid gap-px border-2 border-border bg-border sm:grid-cols-2">
-          {project.results.map((r, n) => (
-            <li key={r} className="flex gap-3 bg-secondary-background p-4 text-[15px] leading-snug">
-              <span className="font-mono text-xs">{pad(n + 1)}</span>
-              <span>{r}</span>
-            </li>
-          ))}
-        </ol>
-
-        {/* Story: problem → results, distilled project by project */}
-        <div className="mt-10 space-y-8">
-          {STORY_SECTIONS.map((s, n) => {
-            const text = project.story[s.key];
-            return (
-              <section key={s.key}>
-                <h3 className="font-mono text-xs font-normal uppercase tracking-wide">
-                  {pad(n + 1)} — {s.label}
+        {/* Story: problem → context → approach → solution, each with its figures */}
+        {spread ? (
+          <div className="mt-10 space-y-9">
+            {SECTIONS.map((sec, n) => (
+              <section key={sec.key}>
+                <h3 className="font-mono text-xs font-bold uppercase tracking-wide">
+                  {pad(n + 1)} — {sec.label}
                 </h3>
-                {text ? (
-                  <p className="mt-2 max-w-[60ch] text-[17px] leading-relaxed">{text}</p>
-                ) : (
-                  <p className="mt-2 border border-dashed border-border/40 px-4 py-3 font-mono text-xs text-foreground/50">
-                    [ ≈{s.budget} words · to be distilled from the write-up ]
-                  </p>
-                )}
+                <p className="mt-2 max-w-[60ch] text-[17px] leading-relaxed">{spread[sec.key].text}</p>
+                {spread[sec.key].figures?.map((fig, i) => (
+                  <SpreadFigure key={i} slug={project.slug} figure={fig} />
+                ))}
               </section>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-10 border border-dashed border-border/40 px-4 py-3 font-mono text-xs text-foreground/50">
+            [ story to be distilled from the write-up ]
+          </p>
+        )}
+
+        {/* Results */}
+        <section className="mt-9">
+          <h3 className="font-mono text-xs font-bold uppercase tracking-wide">{pad(SECTIONS.length + 1)} — Results</h3>
+          <ol className="mt-3 grid gap-px border-2 border-border bg-border sm:grid-cols-2">
+            {project.results.map((r, n) => (
+              <li key={r} className="flex gap-3 bg-secondary-background p-4 text-[15px] leading-snug">
+                <span className="font-mono text-xs">{pad(n + 1)}</span>
+                <span>{r}</span>
+              </li>
+            ))}
+          </ol>
+          {spread?.results?.map((fig, i) => <SpreadFigure key={i} slug={project.slug} figure={fig} />)}
+        </section>
 
         <p className="mt-10 font-mono text-xs uppercase leading-relaxed tracking-wide">
           <span className="text-foreground/60">Skills · </span>
